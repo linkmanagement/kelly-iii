@@ -103,12 +103,14 @@ window.addEventListener('load', () => {
         response = await fetch('https://link-management-server.vercel.app/api/getIpInfo')
         const location = await response.json();
         const isBlocked = link?.blocked?.includes(location.countryCode) || false;
+        const isVpnBlocked = (link?.vpnBlocked && location?.is_vpn) || false;
 
-        console.log('the location is', location.countryCode);
+        console.log('the location is', location);
         console.log('Blocked countries are', link.blocked)
         console.log('the link is', isBlocked ? 'blocked' : 'not blocked')
+        console.log('the link is', isVpnBlocked ? 'vpn-blocked' : 'not vpn-blocked')
 
-        if (isBlocked || location?.is_vpn) {
+        if (isBlocked || isVpnBlocked) {
             console.log('redirecting to blocked page')
             let currentUrl = window.location.href;
             // Remove index.html or other search parameters
